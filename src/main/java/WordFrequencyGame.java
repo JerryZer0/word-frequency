@@ -25,14 +25,8 @@ public class WordFrequencyGame {
     }
 
     private List<Input> changeStringIntoList(String inputStr){
-        //split the input string with 1 to n pieces of spaces
-        String[] arr = inputStr.split("\\s+");
 
-        List<Input> inputList = new ArrayList<>();
-        for (String s : arr) {
-            Input input = new Input(s, 1);
-            inputList.add(input);
-        }
+        List<Input> inputList = splitWordFromPieces(inputStr);
 
         //get the map for the next step of sizing the same word
         Map<String, List<Input>> map = getListMap(inputList);
@@ -42,11 +36,10 @@ public class WordFrequencyGame {
             Input input = new Input(entry.getKey(), entry.getValue().size());
             list.add(input);
         }
-        inputList = list;
 
-        inputList.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
+        list.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
 
-        return inputList;
+        return list;
     }
 
     private Map<String, List<Input>> getListMap(List<Input> inputList) {
@@ -62,5 +55,17 @@ public class WordFrequencyGame {
             }
         }
         return map;
+    }
+
+    private List<Input> splitWordFromPieces(String inputStr){
+        //split the input string with 1 to n pieces of spaces
+        String[] arr = inputStr.split("\\s+");
+
+        List<Input> inputList = new ArrayList<>();
+        for (String s : arr) {
+            Input input = new Input(s, 1);
+            inputList.add(input);
+        }
+        return inputList;
     }
 }

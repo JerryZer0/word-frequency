@@ -10,7 +10,7 @@ public class Input {
         this.count = i;
     }
 
-    public String getValue() {
+    public java.lang.String getValue() {
         return this.value;
     }
 
