@@ -10,28 +10,28 @@ public class WordFrequencyGame {
             return inputStr + " 1";
         } else {
 
-                List<Input> inputList = changeStringIntoList(inputStr);
-                StringJoiner joiner = new StringJoiner("\n");
-                for (Input w : inputList) {
-                    String s = w.getValue() + " " + w.getWordCount();
-                    joiner.add(s);
-                }
-                return joiner.toString();
+            List<Input> inputList = splitWordFromPieces(inputStr);
+
+            //get the map for the next step of sizing the same word
+            Map<String, List<Input>> map = getListMap(inputList);
+
+            List<ResultView> list = calculateWordAndCounts(inputList, map);
+
+            list.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
+
+            StringJoiner joiner = getResultView(list);
+
+            return joiner.toString();
         }
     }
 
-    private List<Input> changeStringIntoList(String inputStr) {
-
-        List<Input> inputList = splitWordFromPieces(inputStr);
-
-        //get the map for the next step of sizing the same word
-        Map<String, List<Input>> map = getListMap(inputList);
-
-        List<Input> list = calculateWordAndCounts(inputList, map);
-
-        list.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
-
-        return list;
+    private StringJoiner getResultView(List<ResultView> inputList) {
+        StringJoiner joiner = new StringJoiner("\n");
+        for (ResultView w : inputList) {
+            String s = w.getValue() + " " + w.getWordCount();
+            joiner.add(s);
+        }
+        return joiner;
     }
 
     private Map<String, List<Input>> getListMap(List<Input> inputList) {
@@ -55,16 +55,16 @@ public class WordFrequencyGame {
 
         List<Input> inputList = new ArrayList<>();
         for (String s : arr) {
-            Input input = new Input(s, 1);
+            Input input = new Input(s);
             inputList.add(input);
         }
         return inputList;
     }
 
-    private List<Input> calculateWordAndCounts(List<Input> inputList, Map<String, List<Input>> map) {
-        List<Input> list = new ArrayList<>();
+    private List<ResultView> calculateWordAndCounts(List<Input> inputList, Map<String, List<Input>> map) {
+        List<ResultView> list = new ArrayList<>();
         for (Map.Entry<String, List<Input>> entry : map.entrySet()) {
-            Input input = new Input(entry.getKey(), entry.getValue().size());
+            ResultView input = new ResultView(entry.getKey(), entry.getValue().size());
             list.add(input);
         }
         return list;
